@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "client:build": "echo \"Error: no client build\" && exit 1",
-    "client:watch": "npx ts-node-dev src/client/app.ts",
+    "client:build": " npx typescript",
+    "client:watch": " npx typescript --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +20,6 @@
   "homepage": "https://github.com/branchard/celeste-bank#readme",
   "devDependencies": {
     "@types/node": "^12.7.11",
-    "ts-node-dev": "^1.0.0-pre.43",
     "typescript": "^3.6.3"
   }
 }
