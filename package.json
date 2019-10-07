@@ -1,0 +1,19 @@
+{
+  "name": "celeste-bank",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/branchard/celeste-bank.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/branchard/celeste-bank/issues"
+  },
+  "homepage": "https://github.com/branchard/celeste-bank#readme"
+}
