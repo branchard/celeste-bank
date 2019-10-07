@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "esModuleInterop": true,
+    "outDir": "public/assets/js",
+    "sourceMap": true,
+    "target": "ES2018",
+    "module": "commonjs"
+  },
+  "include": [
+    "src"
+  ]
+}
