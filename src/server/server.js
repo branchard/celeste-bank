@@ -1,6 +1,7 @@
 let express = require('express');
 let request = require('request');
 let url = require('url');
+const path = require('path');
 
 let MongoClient = require('mongodb').MongoClient;
 let urlMongo = "mongodb://localhost:27017";
@@ -43,13 +44,13 @@ app.get('/search', function(req, res) {
 
           let request = { search: q_search, response: response };
           dbo.collection(collection).insertOne(request, function(err, res) {
-          if (err) { 
+          if (err) {
           console.log("1 document inserted");
           db.close();
           }
         });
         }, '?text=table');
-        
+
       }
       db.close();
     });
@@ -79,7 +80,14 @@ app.get('/owner', function(req, res){
 
     res.send('ok');
 });
-app.listen(3000);  
+
+app.use(express.static(path.join(__dirname, '../../public/')));
+
+app.get('/*', function(req, res){
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
+});
+
+app.listen(3000);
 
 MongoClient.connect(urlMongo, function(err, db) {
   if (err) throw err;
@@ -89,7 +97,7 @@ MongoClient.connect(urlMongo, function(err, db) {
     console.log(result);
     db.close();
   });
-}); 
+});
 
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
