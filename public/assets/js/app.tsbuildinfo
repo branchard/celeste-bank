@@ -1,0 +1,29 @@
+{
+  "bundle": {
+    "commonSourceDirectory": "../../../src/client",
+    "sourceFiles": [
+      "../../../src/client/app.tsx"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 140,
+          "kind": "emitHelpers",
+          "data": "typescript:commonjsimportdefault"
+        },
+        {
+          "pos": 142,
+          "end": 522,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:commonjsimportdefault"
+        ]
+      }
+    }
+  },
+  "version": "3.6.3"
+}
