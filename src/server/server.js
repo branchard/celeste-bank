@@ -34,14 +34,13 @@ app.get('/search', function(req, res) {
     var dbo = db.db(dataBase);
     dbo.collection(collection).findOne(request_find, function(err, result) {
       if (err) throw err;
-      console.log(result);
 
       //si la ligne n'est pas en base on l'a créé
       if (result == null){
         responseFlickr (function (response){
           //on envoie la réponse
           res.send (response);
-
+          
           let request = { search: q_search, response: response };
           dbo.collection(collection).insertOne(request, function(err, res) {
           if (err) {
@@ -49,23 +48,15 @@ app.get('/search', function(req, res) {
           db.close();
           }
         });
-        }, '?text=table');
+        }, q_search);
 
       }
-      db.close();
+      else {
+        console.log ("Données déja en base");
+        res.send (result.response);
+      }
     });
   });
-    //let url = adress_api_flickr+'?method='+flickr_method_photo_search+'?'+'api_key='+api_key+''
- /*   request.get(
-        {
-          url: 'https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key='+api_key+'&text=photo&format=json&nojsoncallback=1',
-        },
-        function (err, httpResponse, body) {
-          console.log(err, body);
-        }
-      );
-*/
-    //res.send('ok');
 });
 
 app.get('/owner', function(req, res){
@@ -89,21 +80,12 @@ app.get('/*', function(req, res){
 
 app.listen(3000);
 
-MongoClient.connect(urlMongo, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("celestebank");
-  dbo.collection("search").find({}).toArray(function(err, result) {
-    if (err) throw err;
-    console.log(result);
-    db.close();
-  });
-});
-
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
   query_parse = query.substr(1);
+  console.log (query_parse);
   let url = adress_api_flickr+'?method='+flickr_method_photo_search+'&'+'api_key='+api_key+'&'+query_parse+'&format=json&nojsoncallback=1';
-  console.log(url);
+ // console.log(url);
   let response = {};
   request.get(
         {
@@ -117,6 +99,3 @@ function responseFlickr (callback, query) {
   return response;
 
 }
-
-
-
