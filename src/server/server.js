@@ -32,7 +32,7 @@ app.get('/search', function(req, res) {
    MongoClient.connect(urlMongo, function(err, db) {
     if (err) throw err;
     var dbo = db.db(dataBase);
-    dbo.collection(collection).findOne({request_find}, function(err, result) {
+    dbo.collection(collection).findOne(request_find, function(err, result) {
       if (err) throw err;
       console.log(result);
 
@@ -93,16 +93,6 @@ app.get('/*', function(req, res){
 
 app.listen(3000);
 
-MongoClient.connect(urlMongo, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("celestebank");
-  dbo.collection("search").findOne({'search': '?text=porte'}, function(err, result) {
-    if (err) throw err;
-    console.log(result);
-    db.close();
-  });
-});
-
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
   query_parse = query.substr(1);
@@ -121,20 +111,3 @@ function responseFlickr (callback, query) {
   return response;
 
 }
-/*MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("celestbank");
-  var myobj = { search: "test7", response: "hello world" };
-  dbo.collection("search").insertOne(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-  });
-
-  dbo.collection("search").find({}).toArray(function(err, result) {
-    if (err) throw err;
-    console.log(result);
-    db.close();
-  });
-}); 
-*/
-
