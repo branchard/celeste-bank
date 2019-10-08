@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/server/server.js",
   "scripts": {
-    "client:build": " npx typescript",
-    "client:watch": " npx typescript --watch",
+    "start": "node src/server/server.js",
+    "client:build": "webpack",
+    "client:watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,14 +19,35 @@
     "url": "https://github.com/branchard/celeste-bank/issues"
   },
   "homepage": "https://github.com/branchard/celeste-bank#readme",
-  "devDependencies": {
-    "@types/node": "^12.7.11",
-    "typescript": "^3.6.3"
-  },
   "dependencies": {
     "express": "^4.17.1",
     "mongodb": "^3.3.2",
     "request": "^2.88.0",
     "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.5",
+    "@types/lodash": "^4.14.142",
+    "@types/node": "^12.7.11",
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "css-loader": "^3.2.0",
+    "fibers": "^4.0.1",
+    "lodash": "^4.17.15",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "react": "^16.10.2",
+    "react-content-loader": "^4.3.1",
+    "react-dom": "^16.10.2",
+    "react-photo-gallery": "^8.0.0",
+    "sass": "^1.23.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
   }
 }
