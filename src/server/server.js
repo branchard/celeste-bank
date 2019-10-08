@@ -31,7 +31,7 @@ app.get('/search', function(req, res) {
    MongoClient.connect(urlMongo, function(err, db) {
     if (err) throw err;
     var dbo = db.db(dataBase);
-    dbo.collection(collection).findOne(request_find, function(err, result) {
+    dbo.collection(collection).findOne({request_find}, function(err, result) {
       if (err) throw err;
       console.log(result);
 
@@ -40,8 +40,9 @@ app.get('/search', function(req, res) {
         responseFlickr (function (response){
           //on envoie la réponse
           res.send (response);
-
+          
           let request = { search: q_search, response: response };
+        //  console.log (request);
           dbo.collection(collection).insertOne(request, function(err, res) {
           if (err) { 
           console.log("1 document inserted");
@@ -51,7 +52,10 @@ app.get('/search', function(req, res) {
         }, '?text=table');
         
       }
-      db.close();
+      else {
+        console.log ("Données déja en base");
+        res.send (result.response);
+      }
     });
   });
     //let url = adress_api_flickr+'?method='+flickr_method_photo_search+'?'+'api_key='+api_key+''
@@ -84,7 +88,7 @@ app.listen(3000);
 MongoClient.connect(urlMongo, function(err, db) {
   if (err) throw err;
   var dbo = db.db("celestebank");
-  dbo.collection("search").find({}).toArray(function(err, result) {
+  dbo.collection("search").findOne({'search': '?text=porte'}, function(err, result) {
     if (err) throw err;
     console.log(result);
     db.close();
@@ -109,6 +113,20 @@ function responseFlickr (callback, query) {
   return response;
 
 }
+/*MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("celestbank");
+  var myobj = { search: "test7", response: "hello world" };
+  dbo.collection("search").insertOne(myobj, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+  });
 
-
+  dbo.collection("search").find({}).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    db.close();
+  });
+}); 
+*/
 
