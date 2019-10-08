@@ -34,7 +34,6 @@ app.get('/search', function(req, res) {
     var dbo = db.db(dataBase);
     dbo.collection(collection).findOne(request_find, function(err, result) {
       if (err) throw err;
-      console.log(result);
 
       //si la ligne n'est pas en base on l'a créé
       if (result == null){
@@ -43,14 +42,13 @@ app.get('/search', function(req, res) {
           res.send (response);
           
           let request = { search: q_search, response: response };
-        //  console.log (request);
           dbo.collection(collection).insertOne(request, function(err, res) {
           if (err) {
           console.log("1 document inserted");
           db.close();
           }
         });
-        }, '?text=table');
+        }, q_search);
 
       }
       else {
@@ -59,17 +57,6 @@ app.get('/search', function(req, res) {
       }
     });
   });
-    //let url = adress_api_flickr+'?method='+flickr_method_photo_search+'?'+'api_key='+api_key+''
- /*   request.get(
-        {
-          url: 'https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key='+api_key+'&text=photo&format=json&nojsoncallback=1',
-        },
-        function (err, httpResponse, body) {
-          console.log(err, body);
-        }
-      );
-*/
-    //res.send('ok');
 });
 
 app.get('/owner', function(req, res){
@@ -96,8 +83,9 @@ app.listen(3000);
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
   query_parse = query.substr(1);
+  console.log (query_parse);
   let url = adress_api_flickr+'?method='+flickr_method_photo_search+'&'+'api_key='+api_key+'&'+query_parse+'&format=json&nojsoncallback=1';
-  console.log(url);
+ // console.log(url);
   let response = {};
   request.get(
         {
