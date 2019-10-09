@@ -131,6 +131,28 @@ html, body, #react-root {
       .inputs-logo-wrapper {
         flex-direction: row;
 
+        .inputs-container {
+          display: flex;
+          flex-direction: row;
+
+          select {
+            margin-left: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-right: 46px;
+            padding-left: 20px;
+            font: 14px arial, sans-serif;
+            line-height: 48px;
+            border: none;
+            border-bottom: 1px solid #dfe1e5;
+            color: #9AA0A6;
+
+            &:focus, &:hover {
+              outline: none;
+            }
+          }
+        }
+
         .logo-container {
           font-size: 36px;
           margin-bottom: 0;

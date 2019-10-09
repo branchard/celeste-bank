@@ -4,7 +4,9 @@ const ACTION_TYPES = {
     TYPE: 'type',
     START_FETCH: 'startFetch',
     FULFIL_FETCH: 'fulfilFetch',
-    ERROR_FETCH: 'errorFetch'
+    ERROR_FETCH: 'errorFetch',
+    SELECT_LICENSE: 'selectLicense',
+    SELECT_SAFE_SEARCH: 'selectSafeSearch',
 };
 
 
@@ -13,12 +15,14 @@ const INITIAL_STATE = {
     pendingSearch: false,
     // @ts-ignore
     photos: [],
-    currentPage: 1
+    currentPage: 1,
+    selectedLicense: '',
+    selectedSafeSearch: 1 // 1 = safe, 2 = moderate, 3 = restricted
 };
 
 let lastController: any;
 
-const fetchApi = debounce((dispatch: any, searchValue: string, pageNumber: number) => {
+const fetchApi = debounce(({dispatch, searchValue, selectedLicense, selectedSafeSearch, pageNumber}) => {
     if (lastController) {
         lastController.abort();
     }
@@ -28,7 +32,7 @@ const fetchApi = debounce((dispatch: any, searchValue: string, pageNumber: numbe
     dispatch({
         type: ACTION_TYPES.START_FETCH
     });
-    window.fetch(`http://localhost:3000/search?text=${searchValue}&per_page=20&page=${pageNumber}&extras=url_o,o_dims`, {signal: lastController.signal})
+    window.fetch(`http://localhost:3000/search?text=${searchValue}${selectedLicense !== undefined && selectedLicense !== '' ? `&license=${selectedLicense}` : ''}&per_page=20&page=${pageNumber}&extras=url_o,o_dims`, {signal: lastController.signal})
         .then(response => response.json())
         .then(json => {
             dispatch({
@@ -46,7 +50,7 @@ const fetchApi = debounce((dispatch: any, searchValue: string, pageNumber: numbe
 }, 300);
 
 export const actions = {
-    type: (value: string) => (dispatch: any) => {
+    type: (value: string) => (dispatch: any, getState: any) => {
         let queries: any = {
             search: value
         };
@@ -69,15 +73,15 @@ export const actions = {
         });
 
         if (value !== '') {
-            fetchApi(dispatch, value, 1);
+            fetchApi({dispatch, searchValue: value, selectedLicense: getState().selectedLicense, pageNumber: 1});
         } else if (lastController) {
             lastController.abort();
         }
 
     },
-    fetchNextPage: (currentPage: number, value: string) => (dispatch: any) => {
+    fetchNextPage: (currentPage: number, value: string) => (dispatch: any, getState: any) => {
         console.log('fetchNextPage', currentPage);
-        fetchApi(dispatch, value, currentPage + 1);
+        fetchApi({dispatch, searchValue: value, selectedLicense: getState().selectedLicense, pageNumber: currentPage + 1});
     },
     initRoute: () => (dispatch: any) => {
         let url = new URL(window.location.href);
@@ -93,23 +97,32 @@ export const actions = {
         });
 
         if (value !== '') {
-            fetchApi(dispatch, value, 1);
+            fetchApi({dispatch, searchValue: value, pageNumber: 1});
         } else if (lastController) {
             lastController.abort();
         }
-    }
+    },
+    selectLicense: (value: string) => (dispatch: any, getState: any) => {
+        dispatch({
+            type: ACTION_TYPES.SELECT_LICENSE,
+            value,
+        });
+
+        fetchApi({dispatch, searchValue: getState().searchValue, selectedLicense: value, pageNumber: 1});
+    },
+    selectedSafeSearch: (value: number) => ({
+        type: ACTION_TYPES.SELECT_SAFE_SEARCH,
+        value
+    })
 };
 
 export const reducer = (previousState = INITIAL_STATE, action: any) => {
-    // console.log('modal reducer', previousState, action);
-    // if (action.type === '@@INIT') {
-    //     return previousState;
-    // }
     switch (action.type) {
         case ACTION_TYPES.TYPE:
             return {
                 ...previousState,
                 searchValue: action.value,
+                pendingSearch: action.value.length > 0,
                 // @ts-ignore
                 photos: []
             };
@@ -129,6 +142,11 @@ export const reducer = (previousState = INITIAL_STATE, action: any) => {
             return {
                 ...previousState,
                 pendingSearch: false
+            };
+        case  ACTION_TYPES.SELECT_LICENSE:
+            return {
+                ...previousState,
+                selectedLicense: action.value
             };
         default:
             return previousState;
