@@ -14,8 +14,8 @@ class Gallery extends React.Component<Props> {
     static mapStateToProps = (state: any) => ({
         pendingSearch: state.core.pendingSearch,
         photos: state.core.photos,
-        currentPage: state.core.photos.currentPage,
-        searchValue: state.core.photos.searchValue,
+        currentPage: state.core.currentPage,
+        searchValue: state.core.searchValue,
     });
 
     constructor(props: Readonly<Props>) {

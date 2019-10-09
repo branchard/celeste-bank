@@ -76,6 +76,7 @@ export const actions = {
 
     },
     fetchNextPage: (currentPage: number, value: string) => (dispatch: any) => {
+        console.log('fetchNextPage', currentPage);
         fetchApi(dispatch, value, currentPage + 1);
     },
     initRoute: () => (dispatch: any) => {
