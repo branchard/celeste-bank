@@ -3,18 +3,22 @@ import {debounce} from 'lodash';
 const ACTION_TYPES = {
     TYPE: 'type',
     START_FETCH: 'startFetch',
-    FULFIL_FETCH: 'fulfilFetch'
+    FULFIL_FETCH: 'fulfilFetch',
+    ERROR_FETCH: 'errorFetch'
 };
+
 
 const INITIAL_STATE = {
     searchValue: '',
-    pendingSearch: false
+    pendingSearch: false,
+    // @ts-ignore
+    photos: []
 };
 
 let lastController: any;
 
 const fetchApi = debounce((dispatch: any, searchValue: string) => {
-    if(lastController){
+    if (lastController) {
         lastController.abort();
     }
 
@@ -23,25 +27,51 @@ const fetchApi = debounce((dispatch: any, searchValue: string) => {
     dispatch({
         type: ACTION_TYPES.START_FETCH
     });
-    window.fetch(`http://localhost:3000/search?text=${searchValue}&per_page=20`, {signal: lastController.signal})
+    window.fetch(`http://localhost:3000/search?text=${searchValue}&per_page=20&extras=url_o,o_dims`, {signal: lastController.signal})
         .then(response => response.json())
         .then(json => {
             dispatch({
-                type: ACTION_TYPES.FULFIL_FETCH
+                type: ACTION_TYPES.FULFIL_FETCH,
+                photos: json.photos.photo
             });
-            lastController = undefined;
-            console.log(json);
+        }).catch(e => {
+        dispatch({
+            type: ACTION_TYPES.ERROR_FETCH
         });
+    }).finally(() => {
+        lastController = undefined;
+    });
 }, 300);
 
 export const actions = {
     type: (value: string) => (dispatch: any) => {
+        let queries: any = {
+            search: value
+        };
+        let url = '/';
+
+        for(let queryIndex of Object.keys(queries)){
+            if(queries[queryIndex]){
+                if(!url){
+                    url += '?';
+                }
+
+                url += `${queryIndex}=${queries[queryIndex]}`;
+            }
+        }
+        history.pushState(undefined, undefined, url);
+
         dispatch({
             type: ACTION_TYPES.TYPE,
             value,
         });
 
-        fetchApi(dispatch, value);
+        if(value !== ''){
+            fetchApi(dispatch, value);
+        }else if(lastController){
+            lastController.abort();
+        }
+
     }
 };
 
@@ -51,7 +81,9 @@ export const reducer = (previousState = INITIAL_STATE, action: any) => {
         case ACTION_TYPES.TYPE:
             return {
                 ...previousState,
-                searchValue: action.value
+                searchValue: action.value,
+                // @ts-ignore
+                photos: []
             };
         case ACTION_TYPES.START_FETCH:
             return {
@@ -59,6 +91,12 @@ export const reducer = (previousState = INITIAL_STATE, action: any) => {
                 pendingSearch: true
             };
         case ACTION_TYPES.FULFIL_FETCH:
+            return {
+                ...previousState,
+                pendingSearch: false,
+                photos: previousState.photos.concat(action.photos)
+            };
+        case ACTION_TYPES.ERROR_FETCH:
             return {
                 ...previousState,
                 pendingSearch: false

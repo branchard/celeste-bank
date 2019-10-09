@@ -9,11 +9,12 @@ import {actions} from './store/core';
 class Layout extends React.Component<Props> {
     static mapStateToProps = (state: any) => ({
         pendingSearch: state.core.pendingSearch,
+        photos: state.core.photos,
     });
 
     render() {
         return (
-            <div className={`app-container ${this.props.pendingSearch ? '' : 'no-results'}`}>
+            <div className={`app-container ${this.props.pendingSearch || this.props.photos.length > 0 ? '' : 'no-results'}`}>
                 <div className="top-container">
                     <div className="inputs-logo-wrapper">
                         <div className="logo-container">CelesteBank</div>
@@ -36,7 +37,8 @@ class Layout extends React.Component<Props> {
 }
 
 interface Props {
-    pendingSearch: boolean
+    pendingSearch: boolean,
+    photos: []
 }
 
 export default connect(Layout.mapStateToProps)(Layout);
