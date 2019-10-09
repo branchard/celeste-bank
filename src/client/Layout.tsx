@@ -12,9 +12,15 @@ class Layout extends React.Component<Props> {
         photos: state.core.photos,
     });
 
+    componentDidMount(): void {
+        this.props.dispatch(actions.initRoute());
+    }
+
     render() {
         return (
-            <div className={`app-container ${this.props.pendingSearch || this.props.photos.length > 0 ? '' : 'no-results'}`}>
+            <div
+                className={`app-container ${this.props.pendingSearch || this.props.photos.length > 0 ? '' : 'no-results'}`}
+            >
                 <div className="top-container">
                     <div className="inputs-logo-wrapper">
                         <div className="logo-container">CelesteBank</div>
@@ -28,17 +34,20 @@ class Layout extends React.Component<Props> {
                         </div>
                     </div>
                 </div>
-                <div className='results-container'>
-                    <Gallery/>
-                </div>
+                {this.props.pendingSearch || this.props.photos.length > 0 ? (
+                    <div className='results-container'>
+                        <Gallery/>
+                    </div>
+                ) : undefined}
             </div>
         )
     }
 }
 
 interface Props {
-    pendingSearch: boolean,
+    pendingSearch: boolean
     photos: []
+    dispatch: any
 }
 
 export default connect(Layout.mapStateToProps)(Layout);

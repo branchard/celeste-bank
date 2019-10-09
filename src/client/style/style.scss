@@ -1,23 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Work+Sans&display=swap');
 
 html, body, #react-root {
-  height: 100%;
   margin: 0;
   padding: 0;
 }
 
 .app-container {
-  height: 100%;
-
   .top-container {
-    height: 100%;
+    min-height: 99vh;
     display: flex;
     justify-content: center;
     align-items: center;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: transparent;
-    transition: height ease .25s, border-bottom-color ease .25s;
+    transition: height ease .25s, border-bottom-color ease .25s, min-height ease .25s;
 
     .inputs-logo-wrapper {
       display: flex;
@@ -125,6 +122,7 @@ html, body, #react-root {
 
   &:not(.no-results) {
     .top-container {
+      min-height: 0;
       height: 92px;
       justify-content: flex-start;
       border-bottom-color: #ebebeb;
