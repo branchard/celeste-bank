@@ -13,7 +13,7 @@ let collection = 'search';
 let app = express();
 app.use(express.json())
 
-const api_key = "8ace1d78f867284ec1756b03727c8b7d";
+const api_key = "ce105037d51265348b9d78cd37e0ff7b";
 
 const adress_api_flickr = "https://www.flickr.com/services/rest/";
 const flickr_method_photo_search = "flickr.photos.search";
@@ -60,16 +60,17 @@ app.get('/search', function(req, res) {
 });
 
 app.get('/owner', function(req, res){
+    let q = url.parse(req.url, true).search;
+    let query_parse = q.substr(1);
+    let url_request = adress_api_flickr+'?method='+flickr_method_people_getPhoto+'&'+'api_key='+api_key+'&'+query_parse+'&format=json&nojsoncallback=1';
     request.get(
         {
-          url: 'https://www.flickr.com/services/rest/?method=flickr.people.getPhotos&api_key='+api_key+'&user_id='+req.param('owner')+'&format=json&nojsoncallback=1',
+          url: url_request,
         },
         function (err, httpResponse, body) {
-          console.log(err, body);
+          res.send(body);
         }
       );
-
-    res.send('ok');
 });
 
 app.use(express.static(path.join(__dirname, '../../public/')));
@@ -83,9 +84,7 @@ app.listen(3000);
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
   query_parse = query.substr(1);
-  console.log (query_parse);
   let url = adress_api_flickr+'?method='+flickr_method_photo_search+'&'+'api_key='+api_key+'&'+query_parse+'&format=json&nojsoncallback=1';
- // console.log(url);
   let response = {};
   request.get(
         {

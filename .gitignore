@@ -62,3 +62,6 @@ typings/
 
 # IDEs
 .idea
+
+# Env
+.env
