@@ -1,6 +1,10 @@
 # celeste-bank
 An image search engine that use the Flickr API
 
+This project use MongoDB, Express, React, Redux, Redux-thunk...
+
+![](https://github.com/branchard/celeste-bank/raw/master/doc/demo.gif)
+
 Run the project (localhost)
 ---------------------------
 1. `npm install --only=prod`
