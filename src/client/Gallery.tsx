@@ -47,8 +47,9 @@ class Gallery extends React.Component<Props> {
     render() {
         return (
             <div className='gallery-container'>
-                {this.props.photos.map((photos: any) => (
+                {this.props.photos.map((photos: any, key: number) => (
                     <PhotoGallery
+                        key={key}
                         photos={photos.filter((photo: any) => photo.width_o || photo.o_width).map((photo: any) => ({
                             src: `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`,
                             width: photo.width_o || photo.o_width,

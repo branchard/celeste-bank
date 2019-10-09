@@ -1,4 +1,5 @@
 # celeste-bank
+An image search engine that use the Flickr API
 
 Run the project (localhost)
 ---------------------------

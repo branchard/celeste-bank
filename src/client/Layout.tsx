@@ -23,10 +23,9 @@ class Layout extends React.Component<Props> {
             >
                 <div className="top-container">
                     <div className="inputs-logo-wrapper">
-                        <div className="logo-container">CelesteBank</div>
+                        <div className="logo-container" onClick={() => {this.props.dispatch(actions.type(''))}}>CelesteBank</div>
                         <div className="inputs-container">
                             <Search placeholder='Rechercher une image...'/>
-                            {/*<SearchButton/>*/}
                             <div className='btns-container'>
                                 <Button text='Recherche'/>
                                 <Button text="J'ai de la chance"/>

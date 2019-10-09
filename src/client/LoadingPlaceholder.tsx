@@ -4,6 +4,10 @@ import {random} from 'lodash';
 import LoadingPlaceholderFragment from "./LoadingPlaceholderFragment";
 
 class LoadingPlaceholder extends React.Component<Props> {
+    shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<{}>, nextContext: any): boolean {
+        return false;
+    }
+
     render() {
         return (
             <div

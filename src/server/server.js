@@ -40,7 +40,7 @@ app.get('/search', function(req, res) {
         responseFlickr (function (response){
           //on envoie la réponse
           res.send (response);
-          
+
           let request = { search: q_search, response: response };
           dbo.collection(collection).insertOne(request, function(err, res) {
           if (err) {
@@ -80,6 +80,7 @@ app.get('/*', function(req, res){
 });
 
 app.listen(3000);
+console.log('Listening 0.0.0.0:3000');
 
 function responseFlickr (callback, query) {
   //On supprimme le premier caractere de la query
